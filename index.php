@@ -86,6 +86,9 @@ if(isset($_POST['num']))
                 //Si il y a du framage je l'affiche
                 echo (($count == 1) ? "<li>Fromage = ".utf8_encode($fromage['libelle_fromage']): '')."</li>";
                 echo "</ul>";
+
+                echo "<a href='commander.php'>Commander</button>";
+
             }
             ?>
 
@@ -93,6 +96,9 @@ if(isset($_POST['num']))
 </div>
 <script type="text/javascript">
 
+    /*
+    *** Fonction qui récupère les détails des plateaux
+     */
     function getDetails(event, num){
     //je récupère le numéro du plateau contenue dans l'attribut value
     //var num = event.target.parentNode.getAttribute("value");
