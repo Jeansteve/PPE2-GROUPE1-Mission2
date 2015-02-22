@@ -7,7 +7,6 @@ if(isset($_POST['num']))
               SELECT PL.libelle_plateau, PL.prix_plateau, F.libelle_fromage, P.libelle_plat, E.libelle_entree, D.Libelle_Dessert
                 FROM PLATEAU PL, FROMAGE F, PLAT P, ENTREE E, DESSERT D
                 WHERE PL.num_plateau = :num
-                AND PL.code_fromage = F.Code_fromage
                 AND PL.code_plat = P.Code_plat
                 AND PL.code_entree = E.Code_entree
                 AND PL.code_dessert = D.Code_Dessert
@@ -17,15 +16,28 @@ if(isset($_POST['num']))
 
     //echo print_r($bdd->errorInfo());
     $donnee = $req->fetch();
+    json_encode($donnee);
 
-   json_encode($donnee);
+    /**
+     * requete qui récupère le libelle du fromage s'il y en a
+     **/
+    $req = $bdd->prepare("SELECT F.libelle_fromage
+                          FROM FROMAGE F, PLATEAU PL
+                          WHERE PL.num_plateau = :num
+                          AND PL.code_fromage = F.Code_fromage");
+
+    $req->bindValue(":num", $num);
+    $req->execute();
+
+    $count = $req->rowCount();
+    if($count == 1)
+    {
+        $fromage = $req->fetch();
+        json_encode($fromage);
+    }
 
     //echo $donnee['libelle_plateau'];
 
-}
-else
-{
-    echo "erreur";
 }
 
 ?>
@@ -71,6 +83,8 @@ else
                         echo "<li>".utf8_encode($key)." = ".utf8_encode($elm)."</li>";
                     }
                 }
+                //Si il y a du framage je l'affiche
+                echo (($count == 1) ? "<li>Fromage = ".utf8_encode($fromage['libelle_fromage']): '')."</li>";
                 echo "</ul>";
             }
             ?>
