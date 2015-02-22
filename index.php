@@ -6,16 +6,16 @@ if(isset($_POST['num']))
     $req = $bdd->prepare("
               SELECT PL.libelle_plateau, PL.prix_plateau, F.libellé_fromage, P.libellé_plat, E.libellé_entrée, D.Libelle_Dessert
 FROM PLATEAU PL, FROMAGE F, PLAT P, ENTREE E, DESSERT D
-WHERE PL.num_plateau =1
+WHERE PL.num_plateau = :num
 AND PL.code_fromage = F.Code_fromage
 AND PL.code_plat = P.Code_plat
 AND PL.code_entree = E.Code_entree
 AND PL.code_dessert = D.Code_Dessert") or die(print_r($bdd->errorInfo()));
-    $req->bindValue(":num", $num);
+    $req->bindParam(":num", $num);
     $req->execute();
 
     echo print_r($bdd->errorInfo());
-    $donnees = $req->fetchAll();
+    $donnees = $req->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode($donnees);
     echo $num;
