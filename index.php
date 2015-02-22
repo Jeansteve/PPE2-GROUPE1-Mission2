@@ -87,7 +87,7 @@ if(isset($_POST['num']))
                 echo (($count == 1) ? "<li>Fromage = ".utf8_encode($fromage['libelle_fromage']): '')."</li>";
                 echo "</ul>";
 
-                echo "<a href='commander.php'>Commander</button>";
+                echo "<a href='commander.php?numC='.$num>Commander</a>";
 
             }
             ?>
