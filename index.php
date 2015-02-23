@@ -15,8 +15,8 @@ if(isset($_POST['num']))
     $req->execute();
 
     //echo print_r($bdd->errorInfo());
-    $donnee = $req->fetch();
-    json_encode($donnee);
+    $details = $req->fetch();
+    json_encode($details);
 
     /**
      * requete qui récupère le libelle du fromage s'il y en a
@@ -74,9 +74,9 @@ if(isset($_POST['num']))
             //si il a sélectionné un plateau pour afficher les détails
             if(isset($_POST['num']))
             {
-                echo "<h2>Détails ".$donnee['libelle_plateau']."</h2>";
+                echo "<h2>Détails ".$details['libelle_plateau']."</h2>";
                 echo "<ul>";
-                foreach($donnee as $key => $elm)
+                foreach($details as $key => $elm)
                 {
                     if(!is_integer($key)) // je vérifie si l'index n'est pas un entier car le résultat Json me retourne un index entier et une chaine
                     {
@@ -86,8 +86,8 @@ if(isset($_POST['num']))
                 //Si il y a du framage je l'affiche
                 echo (($count == 1) ? "<li>Fromage = ".utf8_encode($fromage['libelle_fromage']): '')."</li>";
                 echo "</ul>";
-
-                echo "<a href='commander.php?numC='.$num>Commander</a>";
+                //je passe le numéro de la commande en get
+                echo "<a href='commander.php?numC=".$num."'>Commander</a>";
 
             }
             ?>
