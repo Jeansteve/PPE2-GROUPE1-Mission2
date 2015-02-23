@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST) && isset($_GET['numC']))
+if(!empty($_POST) && isset($_GET['numC']))
 {
     $numCommand = $_GET['numC'];
 
@@ -11,10 +11,12 @@ if(isset($_POST) && isset($_GET['numC']))
     $tel = $_POST['tel'];
 
     $bdd = new PDO("mysql:host=localhost;dbname=BOCCO-GROUPE1","root","root");
-
+    /*
+     * Remplissage de la table CLIENT
+     */
     $req = $bdd->prepare("
         INSERT INTO CLIENT(nom_client, ad_rue_client, cp_client, ville_client, mail_client, tel_client)
-        VALUES  (:nom, :rue, :cp, :ville, :mail, : tel)
+        VALUES  (:nom, :rue, :cp, :ville, :mail, :tel)
     ");
     $req->bindValue(":nom",$nom);
     $req->bindValue(":rue",$rue);
@@ -27,14 +29,26 @@ if(isset($_POST) && isset($_GET['numC']))
 
     $id = $bdd->lastInsertId();
     $req->closeCursor();
-
-    $req2 = $bdd->prepare("
-        INSERT INTO COMMANDE(code_client, date_commande, heure_commande)
-        VALUES (:code, DATE, TIME)
+    /*
+     * Remplissage de la table COMMANDE
+     */
+    $req = $bdd->prepare("
+        INSERT INTO COMMANDE(code_client, date_heure)
+        VALUES (:code, NOW())
     ");
 
-    $req2->bindValue(":code", $id);
-    $req2->execute();
+    $req->bindValue(":code", $id);
+    $req->execute();
+    $req->closeCursor();
+    //echo print_r($req->errorInfo());
+
+    /*
+     * Remplissage de la table CONTENIR
+     */
+    $req = $bdd->prepare("
+        INSERT INTO CONTENIR()
+    ");
+
 }
 ?>
 <!doctype html>

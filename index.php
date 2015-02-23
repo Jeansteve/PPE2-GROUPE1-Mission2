@@ -87,8 +87,12 @@ if(isset($_POST['num']))
                 echo (($count == 1) ? "<li>Fromage = ".utf8_encode($fromage['libelle_fromage']): '')."</li>";
                 echo "</ul>";
                 //je passe le numéro de la commande en get
-                echo "<a href='commander.php?numC=".$num."'>Commander</a>";
-
+                $form = "<form action='commander.php?numC=".$num."' method='get'>";
+                $form .= "<label for='qt'>Saisir la quantité : </label>";
+                $form .= "<input type='text' name='quantite' id='qt' required/>";
+                $form .= "<input type='submit' value='Commmander'/>";
+                $form .= "</form>";
+                echo $form;
             }
             ?>
 
