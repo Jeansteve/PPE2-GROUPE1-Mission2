@@ -1,7 +1,7 @@
 <?php
-if(!empty($_POST) && isset($_GET['numC']))
+if(!empty($_POST) && isset($_GET['numP']))
 {
-    $numCommand = $_GET['numC'];
+    $numPlateau = $_GET['numP'];
 
     $nom = $_POST['nom'];
     $rue = $_POST['rue'];
@@ -46,9 +46,11 @@ if(!empty($_POST) && isset($_GET['numC']))
      * Remplissage de la table CONTENIR
      */
     $req = $bdd->prepare("
-        INSERT INTO CONTENIR()
+        INSERT INTO CONTENIR(num_commande, num_plateau)
+        VALUES (:numC, :numP)
     ");
-
+    $req->bindValue(":numC",$numCommand);
+    $req->bindValue(":numP",$numCommand);
 }
 ?>
 <!doctype html>
@@ -60,12 +62,13 @@ if(!empty($_POST) && isset($_GET['numC']))
 <body>
 <div id="container">
     <form  method="post">
-        <label for="nom">Nom </label><input type="text" name="nom" id="nom"/><br/>
-        <label for="rue">Adresse </label><input type="text" name="rue" id="rue"/><br/>
-        <label for="cp">Code postal</label><input type="text" name="cp" id="cp"/><br/>
-        <label for="ville">Ville </label><input type="text" name="ville" id="ville"/><br/>
-        <label for="mail">Email </label><input type="email" name="mail" id="mail"/><br/>
-        <label for="tel">Telephone </label><input type="tel" name="tel" id="tel"/><br/>
+        <label for="nom">Nom </label><input type="text" name="nom" id="nom" required/><br/>
+        <label for="tel">Telephone </label><input type="tel" name="tel" id="tel" required/><br/>
+        <h3>Lieu de Livraison</h3>
+        <label for="rue">Adresse </label><input type="text" name="rue" id="rue" required/><br/>
+        <label for="cp">Code postal</label><input type="text" name="cp" id="cp" required/><br/>
+        <label for="ville">Ville </label><input type="text" name="ville" id="ville" required/><br/>
+        <label for="mail">Email </label><input type="email" name="mail" id="mail" required/><br/>
         <input type="submit" name="commander"/>
     </form>
 </div>

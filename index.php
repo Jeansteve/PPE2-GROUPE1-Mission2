@@ -1,7 +1,7 @@
 <?php
-if(isset($_POST['num']))
+if(isset($_POST['numP']))
 {
-    $num = $_POST['num'];
+    $numP = $_POST['numP'];
     $bdd = new PDO("mysql:host=localhost;dbname=BOCCO-GROUPE1","root","root");
     $req = $bdd->prepare("
               SELECT PL.libelle_plateau, PL.prix_plateau, F.libelle_fromage, P.libelle_plat, E.libelle_entree, D.Libelle_Dessert
@@ -11,7 +11,7 @@ if(isset($_POST['num']))
                 AND PL.code_entree = E.Code_entree
                 AND PL.code_dessert = D.Code_Dessert
     ") or die(print_r($bdd->errorInfo()));
-    $req->bindParam(":num", $num);
+    $req->bindParam(":num", $numP);
     $req->execute();
 
     //echo print_r($bdd->errorInfo());
@@ -26,7 +26,7 @@ if(isset($_POST['num']))
                           WHERE PL.num_plateau = :num
                           AND PL.code_fromage = F.Code_fromage");
 
-    $req->bindValue(":num", $num);
+    $req->bindValue(":num", $numP);
     $req->execute();
 
     $count = $req->rowCount();
@@ -60,19 +60,20 @@ if(isset($_POST['num']))
 
         foreach($donnees as $plateau)
         {
-            $num = $plateau['num_plateau'];
+            $numP = $plateau['num_plateau'];
             //Quand il clicque j'appelle la fonction pour obtenir les détails
-            echo "<li onclick=\"getDetails(event, ".$num.")\" ><span class=\"titre\" >".$plateau['libelle_plateau']."</span>   <span class=\"prix\">".$plateau['prix_plateau']."€</span></li>";
+            //La fonction est préparer avec comme paramettre un event et son numéro de plateau
+            echo "<li onclick=\"getDetails(event, ".$numP.")\" ><span class=\"titre\" >".$plateau['libelle_plateau']."</span>   <span class=\"prix\">".$plateau['prix_plateau']."€</span></li>";
         }
         ?>
     </ul>
     <form method="post" name="formulaire">
-        <input type="text" name="num" value= "" hidden="hidden"/>
+        <input type="text" name="numP" value= "" hidden="hidden"/>
     </form>
     <div id="details">
             <?php
             //si il a sélectionné un plateau pour afficher les détails
-            if(isset($_POST['num']))
+            if(isset($_POST['numP']))
             {
                 echo "<h2>Détails ".$details['libelle_plateau']."</h2>";
                 echo "<ul>";
@@ -87,7 +88,7 @@ if(isset($_POST['num']))
                 echo (($count == 1) ? "<li>Fromage = ".utf8_encode($fromage['libelle_fromage']): '')."</li>";
                 echo "</ul>";
                 //je passe le numéro de la commande en get
-                $form = "<form action='commander.php?numC=".$num."' method='get'>";
+                $form = "<form action='commander.php?numP=".$numP."' method='get'>";
                 $form .= "<label for='qt'>Saisir la quantité : </label>";
                 $form .= "<input type='text' name='quantite' id='qt' required/>";
                 $form .= "<input type='submit' value='Commmander'/>";
@@ -103,10 +104,10 @@ if(isset($_POST['num']))
     /*
     *** Fonction qui récupère les détails des plateaux
      */
-    function getDetails(event, num){
+    function getDetails(event, numP){
     //je récupère le numéro du plateau contenue dans l'attribut value
     //var num = event.target.parentNode.getAttribute("value");
-        document.getElementsByName("num")[0].setAttribute("value", num);
+        document.getElementsByName("numP")[0].setAttribute("value", numP);
         document.formulaire.submit();
         //alert (event.target.parentNode.getAttribute("value"));
     }
